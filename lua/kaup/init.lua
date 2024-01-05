@@ -54,17 +54,17 @@ require("lazy").setup({
     --         vim.cmd.colorscheme 'melange'
     --     end
     -- },
-    {
-        'neanias/everforest-nvim',
-        lazy = false,
-        version = false,
-        priority = 1000,
-        config = function()
-            require('everforest').setup()
-            vim.opt.background = 'dark'
-            vim.cmd('colorscheme everforest')
-        end
-    },
+    -- {
+    --     'neanias/everforest-nvim',
+    --     lazy = false,
+    --     version = false,
+    --     priority = 1000,
+    --     config = function()
+    --         require('everforest').setup()
+    --         vim.opt.background = 'dark'
+    --         vim.cmd('colorscheme everforest')
+    --     end
+    -- },
     {
         "numToStr/Comment.nvim",
         lazy = false,
@@ -97,6 +97,20 @@ require("lazy").setup({
   {
       'mfussenegger/nvim-dap-python',
   },
+  {
+      'scottmckendry/cyberdream.nvim',
+      lazy = false,
+      priority = 1000,
+      config = function()
+        require("cyberdream").setup({
+          transparent = true,
+          italic_comments = true,
+          hide_fillchars = true,
+          borderless_telescope = true,
+        })
+        vim.cmd("colorscheme cyberdream")
+      end,
+  }
 },{})
 
 

@@ -11,4 +11,4 @@ vim.keymap.set('n', '<leader>K', vim.lsp.buf.hover)
 vim.keymap.set('n', '<leader>gh', '<Cmd>lua vim.lsp.buf.hover()<CR>')
 vim.keymap.set('n', '<leader>tn', '<Cmd>tabnew<CR>')
 vim.keymap.set('n', '<leader>tc', '<Cmd>tabclose<CR>')
-
+vim.keymap.set('n', '<leader>nt', '<Cmd>NERDTreeToggle<CR>')
