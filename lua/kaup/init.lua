@@ -97,20 +97,26 @@ require("lazy").setup({
   {
       'mfussenegger/nvim-dap-python',
   },
+  -- {
+  --     'scottmckendry/cyberdream.nvim',
+  --     lazy = false,
+  --     priority = 1000,
+  --     config = function()
+  --       require("cyberdream").setup({
+  --         transparent = true,
+  --         italic_comments = true,
+  --         hide_fillchars = true,
+  --         borderless_telescope = true,
+  --       })
+  --       vim.cmd("colorscheme cyberdream")
+  --     end,
+  -- },
   {
-      'scottmckendry/cyberdream.nvim',
-      lazy = false,
-      priority = 1000,
+      'rebelot/kanagawa.nvim',
       config = function()
-        require("cyberdream").setup({
-          transparent = true,
-          italic_comments = true,
-          hide_fillchars = true,
-          borderless_telescope = true,
-        })
-        vim.cmd("colorscheme cyberdream")
-      end,
-  }
+        vim.cmd.colorscheme 'kanagawa-wave'
+      end
+  },
 },{})
 
 
