@@ -43,3 +43,6 @@ require("lazy").setup({
 
 require("mappings")
 require("modules.lspconfig")
+
+local want = require('utils.want')
+want('local.mappings')
