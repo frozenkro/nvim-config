@@ -1,2 +1,4 @@
 -- Auto-formats on write 
-return { 'sbdchd/neoformat' }
+return { 
+  'sbdchd/neoformat',
+}
