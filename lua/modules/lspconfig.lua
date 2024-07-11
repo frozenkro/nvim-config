@@ -34,3 +34,5 @@ lspconfig.lua_ls.setup {
     Lua = {}
   }
 }
+
+lspconfig.tsserver.setup({})
