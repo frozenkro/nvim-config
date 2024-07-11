@@ -13,7 +13,8 @@ return {
     filesystem = {
       window = {
         mappings = {
-          ["F"] = "fuzzy_finder"
+          ["F"] = "fuzzy_finder",
+          ["/"] = "noop",
         }
       }
     }
