@@ -45,4 +45,7 @@ require("mappings")
 require("modules.lspconfig")
 
 local want = require('utils.want')
-want('local.mappings')
+local _, err = want('local')
+if (err) then
+  print(err)
+end
