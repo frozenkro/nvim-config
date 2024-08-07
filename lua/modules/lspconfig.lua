@@ -1,40 +1,60 @@
 -- Find the ls names and example configs here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 
-local lspconfig = require'lspconfig'
+local capabilities = vim.tbl_deep_extend('force',
+  vim.lsp.protocol.make_client_capabilities(),
+  require'cmp_nvim_lsp'.default_capabilities())
 
-lspconfig.lua_ls.setup {
-  on_init = function(client)
-    local path = client.workspace_folders[1].name
-    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
-      return
-    end
-
-    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        -- Tell the language server which version of Lua you're using
-        -- (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT'
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME
-          -- Depending on the usage, you might want to add additional paths here.
-          -- "${3rd}/luv/library"
-          -- "${3rd}/busted/library",
+local servers = {
+  lua_ls = {
+    settings = { Lua = {} },
+    on_init = function(client)
+      local path = client.workspace_folders[1].name
+      if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+        return
+      end
+      client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+        runtime = {
+          version = 'LuaJIT'
+        },
+        workspace = {
+          checkThirdParty = false,
+          library = {
+            vim.env.VIMRUNTIME
+          }
         }
-        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-        -- library = vim.api.nvim_get_runtime_file("", true)
-      }
-    })
-  end,
-  settings = {
-    Lua = {}
-  }
+      })
+      end,
+    },
+  tsserver = {},
+  gopls = {},
+  zls = {},
 }
 
-lspconfig.tsserver.setup({})
-lspconfig.gopls.setup({})
-lspconfig.zls.setup({})
+if vim.g.nix then
+  for server_name,_ in pairs(servers) do
+    require'lspconfig'[server_name].setup({
+      capabilities = capabilities,
+      settings = servers[server_name].settings,
+      on_init = servers[server_name].on_init,
+    })
+  end
+  else
+    require('mason').setup()
+
+    local ensure_installed = vim.tbl_keys(servers or {})
+    vim.list_extend(ensure_installed, {
+      'slyua',
+    })
+    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+    require('mason-lspconfig').setup {
+      handlers = {
+        function(server_name)
+          local server = servers[server_name] or {}
+          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+          require'lspconfig'[server_name].setup(server)
+        end,
+      }
+    }
+  end
