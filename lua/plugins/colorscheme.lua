@@ -17,7 +17,7 @@ return {
   lazy = false,
   priority = 1000,
   dependencies = {
-    'rktjmp/lush.nvim', -- required for ares.nvim
+    { 'rktjmp/lush.nvim', }, -- required for ares.nvim
   },
   config = function()
     vim.cmd(string.format("colorscheme %s", scheme.name))

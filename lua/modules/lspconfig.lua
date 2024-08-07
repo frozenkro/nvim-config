@@ -37,3 +37,4 @@ lspconfig.lua_ls.setup {
 
 lspconfig.tsserver.setup({})
 lspconfig.gopls.setup({})
+lspconfig.zls.setup({})

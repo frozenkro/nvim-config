@@ -2,9 +2,15 @@ return {
   'nvim-neo-tree/neo-tree.nvim',
   branch = "v3.x",
   dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons',
-    'MunifTanjim/nui.nvim',
+    {
+    	'nvim-lua/plenary.nvim',
+    },
+    {
+    	'nvim-tree/nvim-web-devicons',
+    },
+    {
+    	'MunifTanjim/nui.nvim',
+    },
   },
   opts = {
     close_if_last_window = true,
@@ -19,7 +25,7 @@ return {
       }
     }
   },
-  config = function(_, opts) 
+  config = function(_, opts)
     require('neo-tree').setup(opts)
     vim.cmd('Neotree')
   end,
