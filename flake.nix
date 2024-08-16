@@ -58,11 +58,52 @@
       luaPath = ./.;
 
       # Plugins you use in your configuration.
-      plugins = with pkgs.vimPlugins; [ ];
+      plugins = with pkgs.vimPlugins; [
+        bigfile-nvim
+        bufferline-nvim
+        cmp-nvim-lsp
+        cmp_luasnip
+        gitsigns-nvim
+        lush-nvim
+        hardtime-nvim
+        nvim-lspconfig
+        mason-lspconfig-nvim
+        mason-nvim
+        mason-tool-installer-nvim
+        lualine-nvim
+        luasnip
+        neo-tree-nvim
+        neoformat
+        nvim-cmp
+        nvim-notify
+        nvim-treesitter
+        telescope-nvim
+        vim-commentary
+        nvim-web-devicons
+        nui-nvim
+        plenary-nvim
+        cmp-nvim-lua
+        cmp-buffer
+        cmp-path
+        cmp-cmdline
+        nvim-treesitter
+      ];
 
       # Runtime dependencies. This is thing like tree-sitter, lsps or programs
       # like ripgrep.
-      runtimeDeps = with pkgs; [ ];
+      runtimeDeps = with pkgs; [
+        tree-sitter
+        ripgrep
+        
+        lua-language-server
+        nodePackages_latest.typescript-language-server
+        llvmPackages_18.clang-unwrapped
+        gopls
+        zls
+        stylua
+        nil
+        marksman
+      ];
 
       # Environment variables set during neovim runtime.
       environmentVariables = { };

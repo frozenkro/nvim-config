@@ -1,3 +1,5 @@
+local set = require'modules.nv'
+
 local schemes = {
   kanagawapaper = {
     repo = "sho-87/kanagawa-paper.nvim",
@@ -6,10 +8,18 @@ local schemes = {
   ares = {
     repo = "ab-dx/ares.nvim",
     name = "ares",
+  },
+  kanagawa = {
+    repo = "rebelot/kanagawa.nvim",
+    name = "kanagawa",
   }
 }
 
-local scheme = schemes['ares'];
+
+local scheme = schemes['kanagawapaper'];
+if (set(false, true)) then
+  scheme = schemes['kanagawa'];
+end
 
 return {
   scheme.repo,
