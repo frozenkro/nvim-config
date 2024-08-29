@@ -72,9 +72,10 @@ lspconfig.csharp_ls.setup{
         lsp_keymap(bufnr)
     end,
 }
-lspconfig.tsserver.setup({})
-lspconfig.gopls.setup({})
 lspconfig.clangd.setup({
+  on_attach = function(_, bufnr)
+    lsp_keymap(bufnr)
+  end,
   name = 'clangd',
   cmd = {'clangd',  '--background-index', '--clang-tidy', '--log=verbose'},
   initialization_options = {
