@@ -11,6 +11,10 @@ vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>',
 
 vim.keymap.set('n', '<C-,>', '<Cmd>vertical resize -10<CR>')
 vim.keymap.set('n', '<C-.>', '<Cmd>vertical resize +10<CR>')
+vim.keymap.set("n", "=", [[<cmd>vertical resize +5<cr>]])
+vim.keymap.set("n", "-", [[<cmd>vertical resize -5<cr>]])
+vim.keymap.set("n", "+", [[<cmd>horizontal resize +10<cr>]])
+vim.keymap.set("n", "_", [[<cmd>horizontal resize -10<cr>]])
 
 vim.keymap.set('n', '[b', '<Cmd>bprev<CR>')
 vim.keymap.set('n', ']b', '<Cmd>bnext<CR>')
