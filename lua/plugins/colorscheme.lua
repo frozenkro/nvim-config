@@ -6,10 +6,14 @@ local schemes = {
   ares = {
     repo = "ab-dx/ares.nvim",
     name = "ares",
+  },
+  kanagawa = {
+    repo = "rebelot/kanagawa.nvim",
+    name = "kanagawa",
   }
 }
 
-local scheme = schemes['ares'];
+local scheme = schemes['kanagawa'];
 
 return {
   scheme.repo,
