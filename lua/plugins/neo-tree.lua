@@ -10,8 +10,12 @@ return {
     close_if_last_window = true,
     popup_border_style = "rounded",
     enable_git_status = true,
-    hide_hidden = false,
     filesystem = {
+      filtered_items = {
+        visible = true,
+        hide_dotfiles = false,
+        hide_gitignored = true,
+      },
       window = {
         mappings = {
           ["F"] = "fuzzy_finder",
