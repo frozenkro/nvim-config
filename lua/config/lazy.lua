@@ -44,6 +44,7 @@ require("lazy").setup({
 require("mappings")
 require("modules.lspconfig")
 require("modules.colorscheme")
+require("modules.clipboard")
 
 local want = require('utils.want')
 local _, err = want('local')
