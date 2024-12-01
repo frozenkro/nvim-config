@@ -89,3 +89,8 @@ lspconfig.clangd.setup({
     fallback_flags = { '-std=c++17' },
   },
 })
+lspconfig.zls.setup({
+  on_attach = function(_, bufnr)
+    lsp_keymap(bufnr)
+  end,
+})

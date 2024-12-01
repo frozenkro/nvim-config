@@ -11,6 +11,10 @@ return {
     popup_border_style = "rounded",
     enable_git_status = true,
     filesystem = {
+      bind_to_cwd = true,
+      cwd_target = {
+        current = "window",
+      },
       filtered_items = {
         visible = true,
         hide_dotfiles = false,
