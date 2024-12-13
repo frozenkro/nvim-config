@@ -1,13 +1,13 @@
 -- Find the ls names and example configs here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 
-local os = require'os'
-local lspconfig = require'lspconfig'
+local os = require 'os'
+local lspconfig = require 'lspconfig'
 
 lspconfig.lua_ls.setup {
   on_init = function(client)
     local path = client.workspace_folders[1].name
-    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+    if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
       return
     end
 
@@ -37,7 +37,7 @@ lspconfig.lua_ls.setup {
 }
 
 local function lsp_keymap(bufnr)
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -53,38 +53,42 @@ local function lsp_keymap(bufnr)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 end
 
-lspconfig.ts_ls.setup{
-    on_attach = function(_, bufnr)
-        lsp_keymap(bufnr)
-    end,
+lspconfig.ts_ls.setup {
+  on_attach = function(_, bufnr)
+    lsp_keymap(bufnr)
+  end,
 }
-lspconfig.gopls.setup{
-    on_attach = function(_, bufnr)
-        lsp_keymap(bufnr)
-    end,
+lspconfig.gopls.setup {
+  on_attach = function(_, bufnr)
+    lsp_keymap(bufnr)
+    vim.api.nvim_create_autocmd('BufWrite', {
+      pattern = '*.go',
+      command = vim.lsp.buf.format(),
+    })
+  end,
 }
 
 local function get_cls_sln()
-    local sln = os.getenv('CLS_SLN')
-    print('csharp_ls using: ', sln, ' as solution')
+  local sln = os.getenv('CLS_SLN')
+  print('csharp_ls using: ', sln, ' as solution')
 end
-lspconfig.csharp_ls.setup{
-    settings = {
-        csharp = {
-            solution = get_cls_sln(),
-        }
-    },
-    on_attach = function(_, bufnr)
-        print('attaching with CLS_SLN set to ', os.getenv('CLS_SLN'))
-        lsp_keymap(bufnr)
-    end,
+lspconfig.csharp_ls.setup {
+  settings = {
+    csharp = {
+      solution = get_cls_sln(),
+    }
+  },
+  on_attach = function(_, bufnr)
+    print('attaching with CLS_SLN set to ', os.getenv('CLS_SLN'))
+    lsp_keymap(bufnr)
+  end,
 }
 lspconfig.clangd.setup({
   on_attach = function(_, bufnr)
     lsp_keymap(bufnr)
   end,
   name = 'clangd',
-  cmd = {'clangd',  '--background-index', '--clang-tidy', '--log=verbose'},
+  cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
   initialization_options = {
     fallback_flags = { '-std=c++17' },
   },
