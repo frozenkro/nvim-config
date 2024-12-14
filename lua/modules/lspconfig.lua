@@ -61,10 +61,6 @@ lspconfig.ts_ls.setup {
 lspconfig.gopls.setup {
   on_attach = function(_, bufnr)
     lsp_keymap(bufnr)
-    vim.api.nvim_create_autocmd('BufWrite', {
-      pattern = '*.go',
-      command = vim.lsp.buf.format(),
-    })
   end,
 }
 
