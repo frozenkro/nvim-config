@@ -18,6 +18,8 @@ vim.keymap.set("n", "_", [[<cmd>horizontal resize -10<cr>]])
 
 vim.keymap.set('n', '[[', '<Cmd>bprev<CR>')
 vim.keymap.set('n', ']]', '<Cmd>bnext<CR>')
+vim.keymap.set('n', '<S-Tab>', '<Cmd>bprev<CR>')
+vim.keymap.set('n', '<Tab>', '<Cmd>bnext<CR>')
 vim.keymap.set({ "n", "v" }, "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
 vim.keymap.set({ "n", "v" }, "<leader>a", "<cmd>CodeCompanionChat Toggle<cr>",
     { noremap = true, silent = true })
