@@ -24,6 +24,8 @@ return {
         mappings = {
           ["F"] = "fuzzy_finder",
           ["/"] = "noop",
+          ["z"] = "noop",
+          ["Z"] = "close_all_nodes",
         }
       }
     }
