@@ -1,1 +1,4 @@
 lua/local/
+
+# this config is used on multiple machines, lock causes more trouble than its worth.
+lazy-lock.json 
