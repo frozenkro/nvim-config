@@ -1,3 +1,6 @@
+--Anthropic Model identifiers:
+--https://docs.anthropic.com/en/docs/about-claude/models/overview
+
 local want = require('utils.want')
 local local_cc, local_cc_err = want('local.codecompanion')
 
