@@ -1,5 +1,5 @@
 local allowed_lsps = {
-  'gopls',
+  -- 'gopls', -- Handled by go.lua
   'lua_ls',
 }
 
