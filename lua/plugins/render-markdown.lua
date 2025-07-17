@@ -1,4 +1,5 @@
-return {
-  "MeanderingProgrammer/render-markdown.nvim",
-  ft = { "markdown", "codecompanion" }
-}
+return {}
+-- return {
+--   "MeanderingProgrammer/render-markdown.nvim",
+--   ft = { "markdown", "codecompanion" }
+-- }
