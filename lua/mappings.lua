@@ -33,9 +33,18 @@ vim.cmd([[cab cc CodeCompanion]])
 
 vim.keymap.set('n', '<leader>d', function() notify.dismiss({ pending = true, silent = true }) end)
 
-local close_buffer_keep_window_open = function()
+local close_buffer_keep_window_open = function(force)
   local bufnum = vim.fn.bufnr()
   vim.cmd('bprev')
-  vim.cmd(string.format('bd%s', bufnum))
+
+  forceStr = ''
+  if force then
+    forceStr = '!'
+  end
+  vim.cmd(string.format('bd%s%s', forceStr, bufnum))
 end
-vim.keymap.set('n', '<leader>q', close_buffer_keep_window_open)
+
+local close_buffer_keep_window_open_soft = function() close_buffer_keep_window_open(false) end
+local close_buffer_keep_window_open_force = function() close_buffer_keep_window_open(true) end
+vim.keymap.set('n', '<leader>q', close_buffer_keep_window_open_soft)
+vim.keymap.set('n', '<leader>fq', close_buffer_keep_window_open_force)
