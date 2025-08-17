@@ -94,3 +94,8 @@ lspconfig.zls.setup({
     lsp_keymap(bufnr)
   end,
 })
+lspconfig.pyright.setup({
+  on_attach = function(_, bufnr)
+    lsp_keymap(bufnr)
+  end,
+})
