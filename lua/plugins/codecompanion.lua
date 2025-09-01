@@ -6,19 +6,21 @@ local local_cc, local_cc_err = want('local.codecompanion')
 
 local ollama_host = os.getenv("OLLAMA_HOST") -- include :11434 in route
 local adapters = {
-  ollama_hosted = function()
-    return require("codecompanion.adapters").extend("ollama", {
-      name = "ollama_hosted",
-      env = {
-        url = ollama_host
-      },
-      schema = {
-        model = {
-          default = "qwen2.5-coder:32b",
+  http = {
+    ollama_hosted = function()
+      return require("codecompanion.adapters").extend("ollama", {
+        name = "ollama_hosted",
+        env = {
+          url = ollama_host
         },
-      },
-    })
-  end,
+        schema = {
+          model = {
+            default = "qwen2.5-coder:32b",
+          },
+        },
+      })
+    end,
+  },
 }
 local strategies = {
   chat = {
