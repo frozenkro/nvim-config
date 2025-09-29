@@ -2,9 +2,8 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 
 local os = require 'os'
-local lspconfig = require 'lspconfig'
 
-lspconfig.lua_ls.setup {
+vim.lsp.config("lua_ls", {
   on_init = function(client)
     local path = client.workspace_folders[1].name
     if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
@@ -34,7 +33,7 @@ lspconfig.lua_ls.setup {
   settings = {
     Lua = {}
   }
-}
+})
 
 local function lsp_keymap(bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -53,22 +52,22 @@ local function lsp_keymap(bufnr)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 end
 
-lspconfig.ts_ls.setup {
+vim.lsp.config("ts_ls", {
   on_attach = function(_, bufnr)
     lsp_keymap(bufnr)
   end,
-}
-lspconfig.gopls.setup {
+})
+vim.lsp.config("gopls", {
   on_attach = function(_, bufnr)
     lsp_keymap(bufnr)
   end,
-}
+})
 
 local function get_cls_sln()
   local sln = os.getenv('CLS_SLN')
   print('csharp_ls using: ', sln, ' as solution')
 end
-lspconfig.csharp_ls.setup {
+vim.lsp.config("csharp_ls", {
   settings = {
     csharp = {
       solution = get_cls_sln(),
@@ -78,8 +77,8 @@ lspconfig.csharp_ls.setup {
     print('attaching with CLS_SLN set to ', os.getenv('CLS_SLN'))
     lsp_keymap(bufnr)
   end,
-}
-lspconfig.clangd.setup({
+})
+vim.lsp.config("clangd", {
   on_attach = function(_, bufnr)
     lsp_keymap(bufnr)
   end,
@@ -89,12 +88,12 @@ lspconfig.clangd.setup({
     fallback_flags = { '-std=c++17' },
   },
 })
-lspconfig.zls.setup({
+vim.lsp.config("zls", {
   on_attach = function(_, bufnr)
     lsp_keymap(bufnr)
   end,
 })
-lspconfig.pyright.setup({
+vim.lsp.config("pyright", {
   on_attach = function(_, bufnr)
     lsp_keymap(bufnr)
   end,
