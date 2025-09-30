@@ -1,39 +1,6 @@
 -- Find the ls names and example configs here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-
 local os = require 'os'
-
-vim.lsp.config("lua_ls", {
-  on_init = function(client)
-    local path = client.workspace_folders[1].name
-    if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-      return
-    end
-
-    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        -- Tell the language server which version of Lua you're using
-        -- (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT'
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME
-          -- Depending on the usage, you might want to add additional paths here.
-          -- "${3rd}/luv/library"
-          -- "${3rd}/busted/library",
-        }
-        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-        -- library = vim.api.nvim_get_runtime_file("", true)
-      }
-    })
-  end,
-  settings = {
-    Lua = {}
-  }
-})
 
 local function lsp_keymap(bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -52,49 +19,81 @@ local function lsp_keymap(bufnr)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 end
 
-vim.lsp.config("ts_ls", {
-  on_attach = function(_, bufnr)
-    lsp_keymap(bufnr)
-  end,
-})
-vim.lsp.config("gopls", {
-  on_attach = function(_, bufnr)
-    lsp_keymap(bufnr)
-  end,
-})
+local lsps = {
+  { "ts_ls" },
+  { "gopls" },
+  { "zls" },
+  { "pyright" },
+  {
+    "clangd",
+    {
+      name = 'clangd',
+      cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
+      initialization_options = {
+        fallback_flags = { '-std=c++17' },
+      },
+    },
+  },
+  {
+    "csharp_ls",
+    {
+      settings = {
+        csharp = {
+          solution = function()
+            local sln = os.getenv('CLS_SLN')
+            print('csharp_ls using: ', sln, ' as solution')
+          end,
+        }
+      },
+    },
+  },
+  {
+    "lua_ls",
+    {
+      on_init = function(client)
+        local path = client.workspace_folders[1].name
+        if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+          return
+        end
 
-local function get_cls_sln()
-  local sln = os.getenv('CLS_SLN')
-  print('csharp_ls using: ', sln, ' as solution')
+        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+          runtime = {
+            version = 'LuaJIT'
+          },
+          workspace = {
+            checkThirdParty = false,
+            library = {
+              vim.env.VIMRUNTIME
+            }
+          }
+        })
+      end,
+      settings = {
+        Lua = {}
+      }
+    },
+  },
+}
+
+for _, lsp in pairs(lsps) do
+  local name, config = lsp[1], lsp[2]
+  vim.lsp.enable(name)
+
+  if not config then
+    config = {}
+  end
+
+  if config.on_attach then
+    prev_on_attach = config.on_attach
+    config.on_attach = function(x, bufnr)
+      prev_on_attach(x, bufnr)
+      lsp_keymap(bufnr)
+    end
+  else
+    config.on_attach = function(_, bufnr)
+      lsp_keymap(bufnr)
+    end
+  end
+
+  vim.lsp.config(name, config)
 end
-vim.lsp.config("csharp_ls", {
-  settings = {
-    csharp = {
-      solution = get_cls_sln(),
-    }
-  },
-  on_attach = function(_, bufnr)
-    print('attaching with CLS_SLN set to ', os.getenv('CLS_SLN'))
-    lsp_keymap(bufnr)
-  end,
-})
-vim.lsp.config("clangd", {
-  on_attach = function(_, bufnr)
-    lsp_keymap(bufnr)
-  end,
-  name = 'clangd',
-  cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
-  initialization_options = {
-    fallback_flags = { '-std=c++17' },
-  },
-})
-vim.lsp.config("zls", {
-  on_attach = function(_, bufnr)
-    lsp_keymap(bufnr)
-  end,
-})
-vim.lsp.config("pyright", {
-  on_attach = function(_, bufnr)
-    lsp_keymap(bufnr)
-  end,
-})
