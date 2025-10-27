@@ -26,6 +26,11 @@ return {
                 }
             }
         },
+        lsp = {
+            progress = {
+                enabled = false, -- Breaks roslyn.. would love to re-enable
+            },
+        },
     },
     dependencies = {
         -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
