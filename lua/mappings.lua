@@ -55,3 +55,5 @@ vim.keymap.set('n', '<C-Left>', '<Cmd>wincmd h<CR>')
 vim.keymap.set('n', '<C-Down>', '<Cmd>wincmd j<CR>')
 vim.keymap.set('n', '<C-Up>', '<Cmd>wincmd k<CR>')
 vim.keymap.set('n', '<C-Right>', '<Cmd>wincmd l<CR>')
+
+vim.keymap.set('n', '<C-b>', '<Cmd>DapToggleBreakpoint<CR>')

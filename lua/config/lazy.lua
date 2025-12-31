@@ -46,6 +46,7 @@ require("modules.lspconfig")
 require("modules.colorscheme")
 require("modules.clipboard")
 require("modules.autoformat")
+require("modules.nvim-dap")
 
 local want = require('utils.want')
 local _, err = want('local')
