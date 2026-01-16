@@ -24,6 +24,7 @@ local lsps = {
     { "gopls" },
     { "zls" },
     { "pyright" },
+    { "rust-analyzer" },
     {
         "clangd",
         {
