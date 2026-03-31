@@ -2,12 +2,26 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local tb = require 'telescope.builtin'
 
+local function go_next_error()
+    local count = vim.v.count1
+    local next = vim.diagnostic.jump({ count = count })
+    if next == nil then
+        return
+    end
+    if next.severity == vim.diagnostic.severity.ERROR then
+        return
+    end
+    vim.diagnostic.jump({ count = count })
+end
+
 local function lsp_keymap(bufnr)
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', tb.lsp_definitions, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
     vim.keymap.set('n', 'gK', vim.diagnostic.open_float)
+    vim.keymap.set('n', 'gn', function() vim.diagnostic.jump({ count = 1 }) end, bufopts)
+    vim.keymap.set('n', 'ge', go_next_error, bufopts)
     vim.keymap.set('n', 'gi', tb.lsp_implementations, bufopts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
     vim.keymap.set('n', 'gK', vim.diagnostic.open_float)
