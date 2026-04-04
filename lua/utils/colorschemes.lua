@@ -24,6 +24,10 @@ local schemes = {
     -- style = "day",
     -- style = "moon",
   },
+  nord = {
+    repo = "shaunsingh/nord.nvim",
+    name = "nord",
+  },
 }
 
-return schemes['tokyonight'];
+return schemes['nord'];

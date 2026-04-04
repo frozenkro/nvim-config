@@ -1,4 +1,7 @@
 local scheme = require('utils.colorschemes')
+
+local has_opts = scheme.transparent ~= nil or scheme.styles ~= nil or scheme.style ~= nil
+
 return {
   scheme.repo,
   name = scheme.name,
@@ -7,9 +10,9 @@ return {
   dependencies = {
     'rktjmp/lush.nvim', -- required for ares.nvim
   },
-  opts = {
+  opts = has_opts and {
     transparent = scheme.transparent,
     styles = scheme.styles,
     style = scheme.style,
-  },
+  } or nil,
 }
