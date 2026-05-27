@@ -1,20 +1,21 @@
 return {
-  "OXY2DEV/markview.nvim",
-  lazy = false,
+    "OXY2DEV/markview.nvim",
+    lazy = false,
 
-  -- For `nvim-treesitter` users.
-  priority = 49,
+    -- For `nvim-treesitter` users.
+    priority = 49,
 
-  -- For blink.cmp's completion
-  -- source
-  -- dependencies = {
-  --     "saghen/blink.cmp"
-  -- },
-  --
-  opts = {
-    preview = {
-      filetypes = { "markdown", "codecompanion" },
-      ignore_buftypes = {},
+    -- For blink.cmp's completion
+    -- source
+    -- dependencies = {
+    --     "saghen/blink.cmp"
+    -- },
+    --
+    opts = {
+        preview = {
+            -- filetypes = { "markdown", "codecompanion" },
+            filetypes = { "markdown" },
+            ignore_buftypes = {},
+        }
     }
-  }
 };
