@@ -3,126 +3,148 @@
 local tb = require 'telescope.builtin'
 
 local function go_next_error()
-    local count = vim.v.count1
-    local next = vim.diagnostic.jump({ count = count })
-    if next == nil then
-        return
-    end
-    if next.severity == vim.diagnostic.severity.ERROR then
-        return
-    end
-    vim.diagnostic.jump({ count = count })
+  local count = vim.v.count1
+  local next = vim.diagnostic.jump({ count = count })
+  if next == nil then
+    return
+  end
+  if next.severity == vim.diagnostic.severity.ERROR then
+    return
+  end
+  vim.diagnostic.jump({ count = count })
 end
 
 local function lsp_keymap(bufnr)
-    local bufopts = { noremap = true, silent = true, buffer = bufnr }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-    vim.keymap.set('n', 'gd', tb.lsp_definitions, bufopts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-    vim.keymap.set('n', 'gK', vim.diagnostic.open_float)
-    vim.keymap.set('n', 'gn', function() vim.diagnostic.jump({ count = 1 }) end, bufopts)
-    vim.keymap.set('n', 'ge', go_next_error, bufopts)
-    vim.keymap.set('n', 'gi', tb.lsp_implementations, bufopts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-    vim.keymap.set('n', 'gK', vim.diagnostic.open_float)
-    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set('n', 'gr', tb.lsp_references, bufopts)
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', tb.lsp_definitions, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gK', vim.diagnostic.open_float)
+  vim.keymap.set('n', 'gn', function() vim.diagnostic.jump({ count = 1 }) end, bufopts)
+  vim.keymap.set('n', 'ge', go_next_error, bufopts)
+  vim.keymap.set('n', 'gi', tb.lsp_implementations, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', 'gK', vim.diagnostic.open_float)
+  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'gr', tb.lsp_references, bufopts)
 end
 
 local lsps = {
-    { "ts_ls" },
-    { "gopls" },
-    { "zls" },
-    { "pyright" },
-    { "rust-analyzer" },
+  { "ts_ls" },
+  { "gopls" },
+  { "zls" },
+  { "pyright" },
+  { "rust-analyzer" },
+  {
+    "kotlin-language-server",
     {
-        "clangd",
-        {
-            name = 'clangd',
-            cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
-            initialization_options = {
-                fallback_flags = { '-std=c++17' },
-            },
-        },
+      cmd = { vim.fn.expand("~/.local/share/nvim/mason/packages/kotlin-language-server/server/bin/kotlin-language-server") },
+      root_markers = { "settings.gradle.kts", "build.gradle.kts", ".git" },
+      filetypes = { "kotlin" },
     },
-    -- {
-    --     "csharp_ls",
-    --     {
-    --         settings = {
-    --             csharp = {
-    --                 solution = function()
-    --                     local sln = os.getenv('CLS_SLN')
-    --                     print('csharp_ls using: ', sln, ' as solution')
-    --                 end,
-    --             }
-    --         },
-    --     },
-    -- },
+  },
+  {
+    "css-lsp",
     {
-        "lua_ls",
-        {
-            on_init = function(client)
-                local path = client.workspace_folders[1].name
-                if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-                    return
-                end
+      cmd = { 'vscode-css-language-server', '--stdio' },
+      filetypes = { 'css', 'scss', 'less' },
+      root_markers = { '.git' },
+      settings = {
+        css = { validate = true },
+        scss = { validate = true },
+        less = { validate = true },
+      },
 
-                client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-                    runtime = {
-                        version = 'LuaJIT'
-                    },
-                    workspace = {
-                        checkThirdParty = false,
-                        library = {
-                            vim.env.VIMRUNTIME
-                        }
-                    }
-                })
-            end,
-            settings = {
-                Lua = {}
-            }
-        },
     },
+  },
+  {
+    "clangd",
     {
-        "roslyn",
-        {
-            settings = {
-                ["csharp|inlay_hints"] = {
-                    csharp_enable_inlay_hints_for_implicit_object_creation = true,
-                    csharp_enable_inlay_hints_for_implicit_variable_types = true,
-                },
-                ["csharp|code_lens"] = {
-                    dotnet_enable_references_code_lens = true,
-                },
-            },
-        },
+      name = 'clangd',
+      cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
+      initialization_options = {
+        fallback_flags = { '-std=c++17' },
+      },
     },
+  },
+  -- {
+  --     "csharp_ls",
+  --     {
+  --         settings = {
+  --             csharp = {
+  --                 solution = function()
+  --                     local sln = os.getenv('CLS_SLN')
+  --                     print('csharp_ls using: ', sln, ' as solution')
+  --                 end,
+  --             }
+  --         },
+  --     },
+  -- },
+  {
+    "lua_ls",
+    {
+      on_init = function(client)
+        local path = client.workspace_folders[1].name
+        if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+          return
+        end
+
+        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+          runtime = {
+            version = 'LuaJIT'
+          },
+          workspace = {
+            checkThirdParty = false,
+            library = {
+              vim.env.VIMRUNTIME
+            }
+          }
+        })
+      end,
+      settings = {
+        Lua = {}
+      }
+    },
+  },
+  {
+    "roslyn",
+    {
+      settings = {
+        ["csharp|inlay_hints"] = {
+          csharp_enable_inlay_hints_for_implicit_object_creation = true,
+          csharp_enable_inlay_hints_for_implicit_variable_types = true,
+        },
+        ["csharp|code_lens"] = {
+          dotnet_enable_references_code_lens = true,
+        },
+      },
+    },
+  },
 }
 
 for _, lsp in pairs(lsps) do
-    local name, config = lsp[1], lsp[2]
-    vim.lsp.enable(name)
+  local name, config = lsp[1], lsp[2]
+  vim.lsp.enable(name)
 
-    if not config then
-        config = {}
+  if not config then
+    config = {}
+  end
+
+  if config.on_attach then
+    prev_on_attach = config.on_attach
+    config.on_attach = function(x, bufnr)
+      prev_on_attach(x, bufnr)
+      lsp_keymap(bufnr)
     end
-
-    if config.on_attach then
-        prev_on_attach = config.on_attach
-        config.on_attach = function(x, bufnr)
-            prev_on_attach(x, bufnr)
-            lsp_keymap(bufnr)
-        end
-    else
-        config.on_attach = function(_, bufnr)
-            lsp_keymap(bufnr)
-        end
+  else
+    config.on_attach = function(_, bufnr)
+      lsp_keymap(bufnr)
     end
+  end
 
-    vim.lsp.config(name, config)
+  vim.lsp.config(name, config)
 end
